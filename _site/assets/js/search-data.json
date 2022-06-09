@@ -1,0 +1,110 @@
+{"0": {
+    "doc": "About",
+    "title": "Yongju Kwon",
+    "content": "This is where I document what I self-study and learn day-to-day . 2022.08 - Software Engineer I at Mastercard . ",
+    "url": "http://localhost:4000/#yongju-kwon",
+    "relUrl": "/#yongju-kwon"
+  },"1": {
+    "doc": "About",
+    "title": "About",
+    "content": " ",
+    "url": "http://localhost:4000/",
+    "relUrl": "/"
+  },"2": {
+    "doc": "Reflection",
+    "title": "Reflection",
+    "content": "2022.06.01 12:48AM PST . | 1. Background | 2. What is Reflection? | 3. Demo | 4. Reflection의 실사용 예 | 5. Reflection의 장점과 단점 | 6. Retrospective | 7. Reference | . ",
+    "url": "http://localhost:4000/docs/java/java-reflection/",
+    "relUrl": "/docs/java/java-reflection/"
+  },"3": {
+    "doc": "Reflection",
+    "title": "1. Background",
+    "content": "지난 포스팅에서 Serialization과 Externalization을 비교할 때 Serialization의 performance가 상대적으로 느린데 그 이유가 reflection을 사용해서라고 설명했다. Reflection이 정확히 어떻게 작동하는 지, 왜 performance면에서 느린지 알고 싶어서 이 글을 작성하게 되었다. ",
+    "url": "http://localhost:4000/docs/java/java-reflection/#1-background",
+    "relUrl": "/docs/java/java-reflection/#1-background"
+  },"4": {
+    "doc": "Reflection",
+    "title": "2. What is Reflection?",
+    "content": "Java Reflection을 통해 우리는 클래스, 인터페이스, 필드 또는 메소드들의 런타임 속성을 들여다보거나 수정할 수 있다. 특히 컴파일 때 이 속성들의 이름을 정확히 모를 때 도움이 된다. 또한 Reflection을 이용해 새 오브젝트를 만들거나 메소드를 실행 혹은 필드 값들을 가져오거나 수정할 수도 있다. 예를 들면, 프로그램이 돌아가는 중 어떤 클래스의 속성들을 가져와 출력할 수 있다. ",
+    "url": "http://localhost:4000/docs/java/java-reflection/#2-what-is-reflection",
+    "relUrl": "/docs/java/java-reflection/#2-what-is-reflection"
+  },"5": {
+    "doc": "Reflection",
+    "title": "3. Demo",
+    "content": "// Test class package main.java.reflection; public class Test { private String s; public Test() { s = \"Test class\"; } public void method1() { System.out.println(\"This is method1\"); } public void method2(int n) { System.out.println(\"This is method2 with integer \" + n); } private void method3() { System.out.println(\"This is a private method\"); } public String getS() { return s; } public void setS(String s) { this.s = s; } } // Demo class package main.java.reflection; import java.beans.IntrospectionException; import java.beans.PropertyDescriptor; import java.lang.reflect.Constructor; import java.lang.reflect.Field; import java.lang.reflect.InvocationTargetException; import java.lang.reflect.Method; class Demo { public static void main(String[] args) throws NoSuchMethodException, InvocationTargetException, IllegalAccessException, NoSuchFieldException, IntrospectionException { Test test = new Test(); Class cls = test.getClass(); //Class class = Class.forName(\"main.java.reflection.Test\"); System.out.println(\"The name of class is \" + cls.getName()); // The name of class is main.java.reflection.Test Constructor constructor = cls.getConstructor(); System.out.printf(\"The name of constructor is %s\\n\\n\", constructor); // The name of constructor is public main.java.reflection.Test() System.out.println(\"The public methods of class are:\"); Method[] methods = cls.getDeclaredMethods(); // Method[] methods = cls.getMethods(); for (Method method: methods) System.out.println(method.getName()); /* The public methods of class are: method1 method2 method3 getS setS */ // Calling method1 Method methodCall1 = cls.getDeclaredMethod(\"method1\"); methodCall1.invoke(test); // This is method1 // Calling method2 Method methodCall2 = cls.getDeclaredMethod(\"method2\", int.class); //Integer.TYPE methodCall2.invoke(test, 30); // This is method2 with integer 30 // Calling method3 Method methodCall3 = cls.getDeclaredMethod(\"method3\"); methodCall3.setAccessible(true); /* IllegalAccessException, class main.java.reflection.Demo cannot access a member of class main.java.reflection.Test with modifiers \"private\" */ methodCall3.invoke(test); // This is a private method // Updating the private instance variable Field field = cls.getDeclaredField(\"s\"); field.setAccessible(true); /* IllegalAccessException, class main.java.reflection.Demo cannot access a member of class main.java.reflection.Test with modifiers \"private\" */ field.set(test, \"new string\"); System.out.println(field.get(test)); // new string // Calling getS PropertyDescriptor pd = new PropertyDescriptor(\"s\", cls); Method getter = pd.getReadMethod(); System.out.println(getter.invoke(test)); // new string } } . ",
+    "url": "http://localhost:4000/docs/java/java-reflection/#3-demo",
+    "relUrl": "/docs/java/java-reflection/#3-demo"
+  },"6": {
+    "doc": "Reflection",
+    "title": "4. Reflection의 실사용 예",
+    "content": ". | 코드 분석 툴 코드 분석툴은 보통 최적화 방법, syntax error, 혹은 에러의 상태까지 어떤 클래스든지 분석이 가능하도록 프로그램이 짜여져 있다. Reflection이 코드를 들여다 볼 때에 사용된다 | . | IntelliJ나 Eclipse 같은 에디터들이 제공하는 메소드 이름 자동 완성 에디터 상의 메소드 이름 자동 완성 기능은 reflection을 통해 제공된다 | . | Java Spring Framework Spring framework에서 각 bean에 의존성을 주입하기 위해 config file 혹은 annotation을 사용하는데, reflection을 통해 이것들을 분석하고 의존성을 주입한다 | . | ORMs (e.g. hibernate) Hibernate 같은 ORM을 사용할 때도 보통 annotation을 사용하는데, 이 역시 reflection을 통해 처리된다 | . | Junit 테스트 초기 Junit은 메소드 이름들을 모두 test로 시작했어야 하고, 지금은 @test 라는 annotation을 사용하는데 이 역시 reflection을 통해 처리된다 | . ",
+    "url": "http://localhost:4000/docs/java/java-reflection/#4-reflection%EC%9D%98-%EC%8B%A4%EC%82%AC%EC%9A%A9-%EC%98%88",
+    "relUrl": "/docs/java/java-reflection/#4-reflection의-실사용-예"
+  },"7": {
+    "doc": "Reflection",
+    "title": "5. Reflection의 장점과 단점",
+    "content": "Reflection의 장점 Reflection은 위에서 설명했듯이 런타임 속성들을 분석하거나 수정할 때 사용된다. 상당히 고급(어려운?) 기능이기 때문에 Java의 핵심, 근본(fundamental)을 잘 알고 있는 개발자들만 사용해야 한다. 경각심을 가지고 사용한다면, reflection은 굉장한 기술이고 reflection이 아니면 할 수 없는 기능들을 사용 가능하게 만든다. | 확장성 Reflection을 이용해 런타임에서 유저가 정의하는 클래스를 이름만 가지고 만들어서 사용할 수 있다. | . | 클래스 탐색 &amp; 개발 시각화 . | 클래스 탐색은 해당 클래스의 모든 멤버들을 나열할 수 있어야 한다 | 개발 시각화는 개발자가 정확한 코드를 쓸 수 있도록 reflection을 통해 정보를 제공한다 | . | . | 디버거 &amp; 테스트 도구 . | 디버거는 클래스들의 private 멤버를 분석할 수 있어야 한다 | 테스트 도구들은 클래스 안에 reflection을 통해 정의된 API들을 불러서 테스트 coverage를 높일 수 있다 | . | . Reflection의 단점/주의할 점 Reflection은 강력하지만 분간없이 사용되어서는 안된다. Reflection 없이 코드 작성이 가능하다면, 사용을 최대한 지양해야 한다는 것을 마음 속에 항상 담아두자. | Performance 비용 Reflection은 dynamical하게 type을 처리하기 때문에 JVM의 최적화가 잘 이루어지지 않을 수 있다. 그로 이해 non-reflective한 접근 방법보다 느린 performance로 처리하고, 때문에 performance에 민감한 프로그램들 중 해당 코드를 자주 사용하는 곳이라면 사용을 지양해야 한다. | . | 보안 Reflection은 런타임 접근이 필요하고 그로 인해 security manager를 우회할 수도 있다. Applet 같은 웹 브라우저에서 작동하는 자바 프로그램 같은 경우에 이 점을 신중하게 생각하고 작성되어야 한다. | . | Anti-abstraction Non-reflective 코드 와는 다르게, reflection을 이용해 private 필드나 메소드까지도 접근할 수 있기 떄문에 개발자는 예상하지 못한 side-effect(e.g. 오작동, 비지니스 조건 미충족)를 초래할 수도 있다. | . ",
+    "url": "http://localhost:4000/docs/java/java-reflection/#5-reflection%EC%9D%98-%EC%9E%A5%EC%A0%90%EA%B3%BC-%EB%8B%A8%EC%A0%90",
+    "relUrl": "/docs/java/java-reflection/#5-reflection의-장점과-단점"
+  },"8": {
+    "doc": "Reflection",
+    "title": "6. Retrospective",
+    "content": "리서치 중 두 가지 재미있는 글이 기억에 남는다. “When you will need reflection; you will know it” - Reflection이 필요할 때면, 그게 언제인 지 알게 될 것이다. Q: When somebody would need Reflection? - 언제 Reflection이 필요할까? A: More than a few professional programmers would answer “as rarely as possible, maybe even never.” -적지 않은 수의 프로그래머들이 이렇게 답할 것이다. “그런 경우는 거의 없을 것이다, 아니면 아예 없을 수도” . ",
+    "url": "http://localhost:4000/docs/java/java-reflection/#6-retrospective",
+    "relUrl": "/docs/java/java-reflection/#6-retrospective"
+  },"9": {
+    "doc": "Reflection",
+    "title": "7. Reference",
+    "content": "Oracle, Trail: The Reflection API Oracle, Using Java Reflection JavaPoint, Java Reflection API Baeldung, Guide to Java Reflection Jenkov.com, Java Reflection Tutorial Geeksforgeeks.org, Reflection in Java Stackoverflow, What is reflection and why is it useful? - 1 Stackoverflow, What is reflection and why is it useful? - 2 Stackoverflow, Integer.class vs int.class Java Reflection – Real Usage Examples . ",
+    "url": "http://localhost:4000/docs/java/java-reflection/#7-reference",
+    "relUrl": "/docs/java/java-reflection/#7-reference"
+  },"10": {
+    "doc": "Serializable vs Externalizable",
+    "title": "Serializable vs Externalizable",
+    "content": ". | Serializable vs Externalizable . | 1. What is Serialization | 2. Serialization 관련 주의할 점 | 3. What is Externalization | 4. Serialization 과 Externalization 의 차이점 | 5. References | . | . ",
+    "url": "http://localhost:4000/docs/java/java-serializable-vs-externalizable/",
+    "relUrl": "/docs/java/java-serializable-vs-externalizable/"
+  },"11": {
+    "doc": "Serializable vs Externalizable",
+    "title": "1. What is Serialization",
+    "content": ". | Serialization 은 자바가 제공하는 기능 중 하나로, Object에 대한 Data와 Type, 그리고 Object안의 Data와 그의 Type까지 Byte stream으로 변환해준다. 반대로 Deserialization은 변환된 Byte Stream을 다시 Object로 변환해주는 과정이다. | . | Java Object는 클래스나 그 클래스의 부모 클래스가 java.io.Serialzable나 java.io.Externalizable을 implement했을 때 Serialization이 가능하다. | . | Object가 Serialize 될 때 어떤 클래스가 저장되었는지에 대한 정보가 serialized stream에 함께 기록이 된다. 하지만 클래스의 definition(class file) 자체를 저장하지는 않는다. import java.io.Serializable; public class Employee implements Serializable { public String name; public String address; public transient int SSN; public int number; public void mailCheck() { System.out.println(\"Mailing a check to \" + name + \" \" + address); } } /* Serialization */ import java.io.FileOutputStream; import java.io.IOException; import java.io.ObjectOutputStream; public class SerializeDemo { public static void main(String [] args) { Employee employee = new Employee(); employee.name = \"Reyan Ali\"; employee.address = \"Phokka Kuan, Ambehta Peer\"; employee.SSN = 11122333; employee.number = 101; String path = \"src/main/resources/employee.ser\"; try (FileOutputStream fileOut = new FileOutputStream(path); ObjectOutputStream out = new ObjectOutputStream(fileOut)) { out.writeObject(employee); System.out.printf(\"Serialized data is saved in {}\", path); } catch (IOException i) { i.printStackTrace(); } } } /* Deserialization */ import java.io.FileInputStream; import java.io.IOException; import java.io.ObjectInputStream; public class DeserializeDemo { public static void main(String [] args) { Employee e = null; try (FileInputStream fileIn = new FileInputStream(\"src/main/resources/employee.ser\"); ObjectInputStream in = new ObjectInputStream(fileIn)) { e = (Employee) in.readObject(); } catch (IOException i) { i.printStackTrace(); return; } catch (ClassNotFoundException c) { System.out.println(\"Employee class not found\"); c.printStackTrace(); return; } System.out.println(\"Deserialized Employee...\"); System.out.printf(\"Name: {}\\n\", e.name); System.out.printf(\"Address: {}\\n\" + e.address); System.out.printf(\"SSN: {}\\n\" + e.SSN); System.out.printf(\"Number: {}\\n\" + e.number); } } /** Deserialized Employee... Name: Reyan Ali Address: Phokka Kuan, Ambehta Peer SSN: 0 Number: 101 */ . | . | 변환된 Byte stream은 platform(JVM)과 독립적이다. 즉, 한 platform에서 serialize 된 Object는 다른 platform에서 deserializing 이 가능하다. | . | Serialization 과정에는 SerialVersionUID라는 version number가 함께 관여가 되는데 이 ID는 deserialization 과정 중에 sender class(serialization 때의 class) 와 receiver class(deserialization 때의 class)가 compatible한 지 확인할 때 쓰인다. 만약 receiver class가 다른 ID를 가지고 있다면 deserialization 과정 중 InvalidClassException을 발생한다. 개발자가 직접 ID를 작성할 수도 있고, 그렇지 않다면 자동으로 생성된다. 자동생성 된 ID는 Compiler에 의존적이기 떄문에 직접 ID를 작성하는 걸 추천한다. // It must be static, final and of type long (any access modifier) static final long serialVersionUID = 42L; . | . ",
+    "url": "http://localhost:4000/docs/java/java-serializable-vs-externalizable/#1-what-is-serialization",
+    "relUrl": "/docs/java/java-serializable-vs-externalizable/#1-what-is-serialization"
+  },"12": {
+    "doc": "Serializable vs Externalizable",
+    "title": "2. Serialization 관련 주의할 점",
+    "content": ". | 만약 부모 클래스가 Serializable 인터페이스를 implement 했다면 자식 클래스는 직접 implement 할 필요는 없다. 하지만 그 반대는 그렇지 않다. | . | 오직 non-static 멤버들만 Serialization이 가능하다 | . | 만약 저장하고 싶지 않은 데이터가 있다면 Static 혹은 transient을 이용하면 된다 | . | Object가 deserialize될 때 Constructor는 관여하지 않는다 | . | 관련된 object들 역시 serializable interface를 implement 해야한다 . class A implements Serializable{ // B also implements Serializable interface B ob=new B(); } . | . | Non-serializable object를 serialize 하려고 하면 NotSerializableException이 발생한다 | . ",
+    "url": "http://localhost:4000/docs/java/java-serializable-vs-externalizable/#2-serialization-%EA%B4%80%EB%A0%A8-%EC%A3%BC%EC%9D%98%ED%95%A0-%EC%A0%90",
+    "relUrl": "/docs/java/java-serializable-vs-externalizable/#2-serialization-관련-주의할-점"
+  },"13": {
+    "doc": "Serializable vs Externalizable",
+    "title": "3. What is Externalization",
+    "content": ". | Extrenalizable은 java.io.Serializable interface를 상속한다. Serializable과 다른 점은 Externalizable을 implement한 class는 writeExternal과 readExternal을 override 해야 한다. | Serializable 과는 달리 개발자가 control을 할 수 있기 때문에 JVM이 제공하는 기본 serialization 변경할 수 있다. import java.io.Externalizable; import java.io.IOException; import java.io.ObjectInput; import java.io.ObjectOutput; public class EmployeeExternalizable implements Externalizable { public String name; public String address; public int SSN; public int number; // getter, setter // Serialize 할 때 쓰임 @Override public void writeExternal(ObjectOutput out) throws IOException { out.writeObject(name); out.writeObject(address); out.writeInt(number); } // Deserialize 할 때 쓰임 @Override public void readExternal(ObjectInput in) throws IOException, ClassNotFoundException { this.name = (String) in.readObject(); this.address = (String) in.readObject(); this.number = in.readInt(); } } /* Externalize Demo */ import java.io.*; public class ExternalizeDemo { public static void main(String[] args) throws IOException, ClassNotFoundException { EmployeeExternalizable employeeEx = new EmployeeExternalizable(); employeeEx.setAddress(\"438 Seymour Street\"); employeeEx.setName(\"John Doe\"); employeeEx.setNumber(101); String path = \"src/main/resources/employeeEx.ser\"; // Serialization try (FileOutputStream fos = new FileOutputStream(path); ObjectOutputStream oos = new ObjectOutputStream(fos)) { employeeEx.writeExternal(oos); } catch (IOException e) { System.err.println(\"Error occurred during serialization!\"); e.printStackTrace(); } // Deserialization EmployeeExternalizable employeeEx2 = new EmployeeExternalizable(); try(FileInputStream fis = new FileInputStream(path); ObjectInputStream ois = new ObjectInputStream(fis)) { employeeEx2.readExternal(ois); } catch (IOException | ClassNotFoundException e) { System.err.println(\"Error occurred during deserialization!\"); e.printStackTrace(); } System.out.println(employeeEx2.getAddress().equals(employeeEx.getAddress())); System.out.println(employeeEx2.getName().equals(employeeEx.getName())); System.out.println(employeeEx2.getNumber() == employeeEx.getNumber()); /** true true true */ } } . | . ",
+    "url": "http://localhost:4000/docs/java/java-serializable-vs-externalizable/#3-what-is-externalization",
+    "relUrl": "/docs/java/java-serializable-vs-externalizable/#3-what-is-externalization"
+  },"14": {
+    "doc": "Serializable vs Externalizable",
+    "title": "4. Serialization 과 Externalization 의 차이점",
+    "content": "|   | Key | Serialization | Externalization | . | 1 | Interface | 마커 인터페이스 | readExternal(), writeExternal() 포함 | . | 2 | Implementation logic | JVM이 모든 권한을 가짐 | 개발자가 logic을 변경할 수 있음 | . | 3 | Way to ignore variables | JVM이 static 혹은 transient data를 제외함 | 개발자가 선택할 수 있음 | . | 4 | Performance | Reflection을 사용하기 때문에 상대적으로 느림 | 개발자가 implementation을 control할 수 있기 때문에 상대적으로 빠름 | . ",
+    "url": "http://localhost:4000/docs/java/java-serializable-vs-externalizable/#4-serialization-%EA%B3%BC-externalization-%EC%9D%98-%EC%B0%A8%EC%9D%B4%EC%A0%90",
+    "relUrl": "/docs/java/java-serializable-vs-externalizable/#4-serialization-과-externalization-의-차이점"
+  },"15": {
+    "doc": "Serializable vs Externalizable",
+    "title": "5. References",
+    "content": "Java Documentation - Serializable Objects TutorialsPoint - Java Serialization Geeksforgeeks - Serialization and Deserialization in Java with Example Baeldung - Introduction to Java Serialization . ",
+    "url": "http://localhost:4000/docs/java/java-serializable-vs-externalizable/#5-references",
+    "relUrl": "/docs/java/java-serializable-vs-externalizable/#5-references"
+  },"16": {
+    "doc": "Template",
+    "title": "Reflection",
+    "content": "Date created: 2022.06.01 12:48AM PST Date last modified: 2022.06.01 12:48AM PST ",
+    "url": "http://localhost:4000/docs/template/#reflection",
+    "relUrl": "/docs/template/#reflection"
+  },"17": {
+    "doc": "Template",
+    "title": "Template",
+    "content": " ",
+    "url": "http://localhost:4000/docs/template/",
+    "relUrl": "/docs/template/"
+  }
+}

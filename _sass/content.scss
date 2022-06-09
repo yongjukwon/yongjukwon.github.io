@@ -18,6 +18,16 @@
     margin-top: 0.5em;
   }
 
+  blockquote {
+    border-left: 3px solid #4c4c4c;
+    padding: 0 15px;
+    background-color: #ffffff;
+    font-style: italic;
+    margin-inline-start: 0;
+    margin-inline-end: 0;
+    color: #4c4c4c;
+  }
+
   a {
     overflow: hidden;
     text-overflow: ellipsis;
@@ -210,7 +220,7 @@
   h5,
   h6 {
     position: relative;
-    margin-top: 1.5em;
+    margin-top: 0.75em;
     margin-bottom: 0.25em;
 
     &:first-child {
@@ -227,5 +237,10 @@
     + p {
       margin-top: 0;
     }
+  }
+
+  h1 {
+    text-align: center;
+    font-weight: 500;
   }
 }

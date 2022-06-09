@@ -2,8 +2,12 @@
 layout: default
 title: About
 nav_order: 1
-description: "Just the Docs is a responsive Jekyll theme with built-in search that is easily customizable and hosted on GitHub Pages."
 permalink: /
 ---
 
-# Yongju Kwon
+## Yongju Kwon
+This is where I document what I self-study and learn day-to-day
+
+<br />
+2022.08 - \
+Software Engineer I at Mastercard

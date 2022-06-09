@@ -1,0 +1,321 @@
+I"�u<h1 id="serializable-vs-externalizable">Serializable vs Externalizable</h1>
+
+<ul id="markdown-toc">
+  <li><a href="#serializable-vs-externalizable" id="markdown-toc-serializable-vs-externalizable">Serializable vs Externalizable</a>    <ul>
+      <li><a href="#1-what-is-serialization" id="markdown-toc-1-what-is-serialization">1. What is Serialization</a></li>
+      <li><a href="#2-serialization-관련-주의할-점" id="markdown-toc-2-serialization-관련-주의할-점">2. Serialization 관련 주의할 점</a></li>
+      <li><a href="#3-what-is-externalization" id="markdown-toc-3-what-is-externalization">3. What is Externalization</a></li>
+      <li><a href="#4-serialization-과-externalization-의-차이점" id="markdown-toc-4-serialization-과-externalization-의-차이점">4. Serialization 과 Externalization 의 차이점</a></li>
+      <li><a href="#5-references" id="markdown-toc-5-references">5. References</a></li>
+    </ul>
+  </li>
+</ul>
+
+<h2 id="1-what-is-serialization">1. What is Serialization</h2>
+
+<p><!-- - Serialization is a Java-provided mechan\ism where a object can be represented as a sequence of bytes that includes the object's data as well as information about the object's type and the types of data stored in the object --></p>
+<ul>
+  <li>Serialization 은 자바가 제공하는 기능 중 하나로, Object에 대한 Data와 Type, 그리고 Object안의 Data와 그의 Type까지 Byte stream으로 변환해준다. 반대로 Deserialization은 변환된 Byte Stream을 다시 Object로 변환해주는 과정이다.</li>
+</ul>
+
+<p><img src="/assets/images/serialize-deserialize-java.png" style=" display: block; margin: 0 auto; margin-bottom: 20px;" /></p>
+
+<p><!-- - A Java object is serializable if its class or any of its superclasses implements either `java.io.Serializable` interface or its sub-interface, `java.io.Externalizable`. --></p>
+<ul>
+  <li>Java Object는 클래스나 그 클래스의 부모 클래스가 <code class="language-plaintext highlighter-rouge">java.io.Serialzable</code>나 <code class="language-plaintext highlighter-rouge">java.io.Externalizable</code>을 implement했을 때 Serialization이 가능하다.</li>
+</ul>
+
+<p><!-- - When an object is serialized, information that identifies its class is recorded in the serialized stream. However, the class's definition("class file") itself is not recorded.  --></p>
+<ul>
+  <li>
+    <p>Object가 Serialize 될 때 어떤 클래스가 저장되었는지에 대한 정보가 serialized stream에 함께 기록이 된다. 하지만 클래스의 definition(class file) 자체를 저장하지는 않는다.</p>
+
+    <div class="language-java highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kn">import</span> <span class="nn">java.io.Serializable</span><span class="o">;</span>
+
+<span class="kd">public</span> <span class="kd">class</span> <span class="nc">Employee</span> <span class="kd">implements</span> <span class="nc">Serializable</span> <span class="o">{</span>
+    <span class="kd">public</span> <span class="nc">String</span> <span class="n">name</span><span class="o">;</span>
+    <span class="kd">public</span> <span class="nc">String</span> <span class="n">address</span><span class="o">;</span>
+    <span class="kd">public</span> <span class="kd">transient</span> <span class="kt">int</span> <span class="no">SSN</span><span class="o">;</span>
+    <span class="kd">public</span> <span class="kt">int</span> <span class="n">number</span><span class="o">;</span>
+
+    <span class="kd">public</span> <span class="kt">void</span> <span class="nf">mailCheck</span><span class="o">()</span> <span class="o">{</span>
+        <span class="nc">System</span><span class="o">.</span><span class="na">out</span><span class="o">.</span><span class="na">println</span><span class="o">(</span><span class="s">"Mailing a check to "</span> <span class="o">+</span> <span class="n">name</span> <span class="o">+</span> <span class="s">" "</span> <span class="o">+</span> <span class="n">address</span><span class="o">);</span>
+    <span class="o">}</span>
+<span class="o">}</span>
+
+<span class="cm">/* Serialization */</span>    
+<span class="kn">import</span> <span class="nn">java.io.FileOutputStream</span><span class="o">;</span>
+<span class="kn">import</span> <span class="nn">java.io.IOException</span><span class="o">;</span>
+<span class="kn">import</span> <span class="nn">java.io.ObjectOutputStream</span><span class="o">;</span>
+
+<span class="kd">public</span> <span class="kd">class</span> <span class="nc">SerializeDemo</span> <span class="o">{</span>
+
+    <span class="kd">public</span> <span class="kd">static</span> <span class="kt">void</span> <span class="nf">main</span><span class="o">(</span><span class="nc">String</span> <span class="o">[]</span> <span class="n">args</span><span class="o">)</span> <span class="o">{</span>
+        <span class="nc">Employee</span> <span class="n">employee</span> <span class="o">=</span> <span class="k">new</span> <span class="nc">Employee</span><span class="o">();</span>
+        <span class="n">employee</span><span class="o">.</span><span class="na">name</span> <span class="o">=</span> <span class="s">"Reyan Ali"</span><span class="o">;</span>
+        <span class="n">employee</span><span class="o">.</span><span class="na">address</span> <span class="o">=</span> <span class="s">"Phokka Kuan, Ambehta Peer"</span><span class="o">;</span>
+        <span class="n">employee</span><span class="o">.</span><span class="na">SSN</span> <span class="o">=</span> <span class="mi">11122333</span><span class="o">;</span>
+        <span class="n">employee</span><span class="o">.</span><span class="na">number</span> <span class="o">=</span> <span class="mi">101</span><span class="o">;</span>
+
+        <span class="nc">String</span> <span class="n">path</span> <span class="o">=</span> <span class="s">"src/main/resources/employee.ser"</span><span class="o">;</span>
+
+        <span class="k">try</span> <span class="o">(</span><span class="nc">FileOutputStream</span> <span class="n">fileOut</span> <span class="o">=</span> <span class="k">new</span> <span class="nc">FileOutputStream</span><span class="o">(</span><span class="n">path</span><span class="o">);</span>
+            <span class="nc">ObjectOutputStream</span> <span class="n">out</span> <span class="o">=</span> <span class="k">new</span> <span class="nc">ObjectOutputStream</span><span class="o">(</span><span class="n">fileOut</span><span class="o">))</span> <span class="o">{</span>
+            <span class="n">out</span><span class="o">.</span><span class="na">writeObject</span><span class="o">(</span><span class="n">employee</span><span class="o">);</span>
+
+            <span class="nc">System</span><span class="o">.</span><span class="na">out</span><span class="o">.</span><span class="na">printf</span><span class="o">(</span><span class="s">"Serialized data is saved in {}"</span><span class="o">,</span> <span class="n">path</span><span class="o">);</span>
+        <span class="o">}</span> <span class="k">catch</span> <span class="o">(</span><span class="nc">IOException</span> <span class="n">i</span><span class="o">)</span> <span class="o">{</span>
+            <span class="n">i</span><span class="o">.</span><span class="na">printStackTrace</span><span class="o">();</span>
+        <span class="o">}</span>
+    <span class="o">}</span>
+<span class="o">}</span>
+
+<span class="cm">/* Deserialization */</span>
+<span class="kn">import</span> <span class="nn">java.io.FileInputStream</span><span class="o">;</span>
+<span class="kn">import</span> <span class="nn">java.io.IOException</span><span class="o">;</span>
+<span class="kn">import</span> <span class="nn">java.io.ObjectInputStream</span><span class="o">;</span>
+
+<span class="kd">public</span> <span class="kd">class</span> <span class="nc">DeserializeDemo</span> <span class="o">{</span>
+    <span class="kd">public</span> <span class="kd">static</span> <span class="kt">void</span> <span class="nf">main</span><span class="o">(</span><span class="nc">String</span> <span class="o">[]</span> <span class="n">args</span><span class="o">)</span> <span class="o">{</span>
+        <span class="nc">Employee</span> <span class="n">e</span> <span class="o">=</span> <span class="kc">null</span><span class="o">;</span>
+
+        <span class="k">try</span> <span class="o">(</span><span class="nc">FileInputStream</span> <span class="n">fileIn</span> <span class="o">=</span> <span class="k">new</span> <span class="nc">FileInputStream</span><span class="o">(</span><span class="s">"src/main/resources/employee.ser"</span><span class="o">);</span>
+            <span class="nc">ObjectInputStream</span> <span class="n">in</span> <span class="o">=</span> <span class="k">new</span> <span class="nc">ObjectInputStream</span><span class="o">(</span><span class="n">fileIn</span><span class="o">))</span> <span class="o">{</span>
+            <span class="n">e</span> <span class="o">=</span> <span class="o">(</span><span class="nc">Employee</span><span class="o">)</span> <span class="n">in</span><span class="o">.</span><span class="na">readObject</span><span class="o">();</span>
+        <span class="o">}</span> <span class="k">catch</span> <span class="o">(</span><span class="nc">IOException</span> <span class="n">i</span><span class="o">)</span> <span class="o">{</span>
+            <span class="n">i</span><span class="o">.</span><span class="na">printStackTrace</span><span class="o">();</span>
+            <span class="k">return</span><span class="o">;</span>
+        <span class="o">}</span> <span class="k">catch</span> <span class="o">(</span><span class="nc">ClassNotFoundException</span> <span class="n">c</span><span class="o">)</span> <span class="o">{</span>
+            <span class="nc">System</span><span class="o">.</span><span class="na">out</span><span class="o">.</span><span class="na">println</span><span class="o">(</span><span class="s">"Employee class not found"</span><span class="o">);</span>
+            <span class="n">c</span><span class="o">.</span><span class="na">printStackTrace</span><span class="o">();</span>
+            <span class="k">return</span><span class="o">;</span>
+        <span class="o">}</span>
+
+        <span class="nc">System</span><span class="o">.</span><span class="na">out</span><span class="o">.</span><span class="na">println</span><span class="o">(</span><span class="s">"Deserialized Employee..."</span><span class="o">);</span>
+        <span class="nc">System</span><span class="o">.</span><span class="na">out</span><span class="o">.</span><span class="na">printf</span><span class="o">(</span><span class="s">"Name: {}\n"</span><span class="o">,</span> <span class="n">e</span><span class="o">.</span><span class="na">name</span><span class="o">);</span>
+        <span class="nc">System</span><span class="o">.</span><span class="na">out</span><span class="o">.</span><span class="na">printf</span><span class="o">(</span><span class="s">"Address: {}\n"</span> <span class="o">+</span> <span class="n">e</span><span class="o">.</span><span class="na">address</span><span class="o">);</span>
+        <span class="nc">System</span><span class="o">.</span><span class="na">out</span><span class="o">.</span><span class="na">printf</span><span class="o">(</span><span class="s">"SSN: {}\n"</span> <span class="o">+</span> <span class="n">e</span><span class="o">.</span><span class="na">SSN</span><span class="o">);</span>
+        <span class="nc">System</span><span class="o">.</span><span class="na">out</span><span class="o">.</span><span class="na">printf</span><span class="o">(</span><span class="s">"Number: {}\n"</span> <span class="o">+</span> <span class="n">e</span><span class="o">.</span><span class="na">number</span><span class="o">);</span>
+    <span class="o">}</span>
+<span class="o">}</span>
+
+<span class="cm">/**
+  Deserialized Employee...
+  Name: Reyan Ali
+  Address: Phokka Kuan, Ambehta Peer
+  SSN: 0
+  Number: 101
+*/</span>
+</code></pre></div>    </div>
+  </li>
+</ul>
+
+<p><!-- - The byte stream created is a platform independent. So, the object serialized on one platform can be deserialized on a different platform --></p>
+<ul>
+  <li>변환된 Byte stream은 platform(JVM)과 독립적이다. 즉, 한 platform에서 serialize 된 Object는 다른 platform에서 deserializing 이 가능하다.</li>
+</ul>
+
+<p><!-- - The Serialization runtime associates a version number with each Serializable class called a SerialVersionUID, which is used during Deserialization to verify that sender and receiver of a serialized object have loaded classes for that object which are compatible with respect to serialization. If the receiver has loaded a class for the object that has different UID that that of corresponding sender's class, the Deserialization will result in an `InvalidClassException`. A serializable class can declare its own UID explicitly by declaring a field name.  
+  The automatically generated number is compiler dependent. This means it may cause an unlikely `InvalidClassException` --></p>
+<ul>
+  <li>
+    <p>Serialization 과정에는 <code class="language-plaintext highlighter-rouge">SerialVersionUID</code>라는 version number가 함께 관여가 되는데 이 ID는 deserialization 과정 중에 sender class(serialization 때의 class) 와 receiver class(deserialization 때의 class)가 compatible한 지 확인할 때 쓰인다. 만약 receiver class가 다른 ID를 가지고 있다면 deserialization 과정 중 <code class="language-plaintext highlighter-rouge">InvalidClassException</code>을 발생한다. 개발자가 직접 ID를 작성할 수도 있고, 그렇지 않다면 자동으로 생성된다. 자동생성 된 ID는 Compiler에 의존적이기 떄문에 직접 ID를 작성하는 걸 추천한다.</p>
+
+    <div class="language-java highlighter-rouge"><div class="highlight"><pre class="highlight"><code>  <span class="c1">// It must be static, final and of type long</span>
+  <span class="o">(</span><span class="n">any</span> <span class="n">access</span> <span class="n">modifier</span><span class="o">)</span> <span class="kd">static</span> <span class="kd">final</span> <span class="kt">long</span> <span class="n">serialVersionUID</span> <span class="o">=</span> <span class="mi">42L</span><span class="o">;</span>
+</code></pre></div>    </div>
+  </li>
+</ul>
+
+<p><br /></p>
+
+<h2 id="2-serialization-관련-주의할-점">2. Serialization 관련 주의할 점</h2>
+
+<p><!-- - If a parent class implemented Serializable interface, child class doesn't need to implement it but vice-versa is not true   --></p>
+<ul>
+  <li>만약 부모 클래스가 Serializable 인터페이스를 implement 했다면 자식 클래스는 직접 implement 할 필요는 없다. 하지만 그 반대는 그렇지 않다.</li>
+</ul>
+
+<p><!-- - Only non-static members are saved via Serialization process --></p>
+<ul>
+  <li>오직 non-static 멤버들만 Serialization이 가능하다</li>
+</ul>
+
+<p><!-- - Static data members and transient data members are not saved via Serialization process. So, if you don't want to save value of non-static data member, make it transient --></p>
+<ul>
+  <li>만약 저장하고 싶지 않은 데이터가 있다면 Static 혹은 transient을 이용하면 된다</li>
+</ul>
+
+<p><!-- - Constructor of object is never called when an object is deserialized --></p>
+<ul>
+  <li>Object가 deserialize될 때 Constructor는 관여하지 않는다</li>
+</ul>
+
+<p><!-- - Associated objects must be implementing Serializable interface --></p>
+<ul>
+  <li>
+    <p>관련된 object들 역시 serializable interface를 implement 해야한다</p>
+
+    <div class="language-java highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kd">class</span> <span class="nc">A</span> <span class="kd">implements</span> <span class="nc">Serializable</span><span class="o">{</span>
+  <span class="c1">// B also implements Serializable interface</span>
+  <span class="no">B</span> <span class="n">ob</span><span class="o">=</span><span class="k">new</span> <span class="no">B</span><span class="o">();</span>  
+<span class="o">}</span>
+</code></pre></div>    </div>
+  </li>
+</ul>
+
+<p><!-- - If we are trying to serialize a non-serializable object, we will get `NotSerializableException` --></p>
+<ul>
+  <li>Non-serializable object를 serialize 하려고 하면 <code class="language-plaintext highlighter-rouge">NotSerializableException</code>이 발생한다</li>
+</ul>
+
+<p><br /></p>
+
+<h2 id="3-what-is-externalization">3. What is Externalization</h2>
+
+<p><!-- - Externalizable extends from the `java.io.Serializable` interface. Any class that implements Externalizable interface should override the `writeExternal(), readExternal()` methods. That way we can change the JVM's default serialization behaviour --></p>
+<ul>
+  <li>
+    <p>Extrenalizable은 <code class="language-plaintext highlighter-rouge">java.io.Serializable</code> interface를 상속한다. Serializable과 다른 점은 Externalizable을 implement한 class는 <code class="language-plaintext highlighter-rouge">writeExternal</code>과 <code class="language-plaintext highlighter-rouge">readExternal</code>을 override 해야 한다.</p>
+  </li>
+  <li>
+    <p>Serializable 과는 달리 개발자가 control을 할 수 있기 때문에 JVM이 제공하는 기본 serialization 변경할 수 있다.</p>
+
+    <div class="language-java highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kn">import</span> <span class="nn">java.io.Externalizable</span><span class="o">;</span>
+<span class="kn">import</span> <span class="nn">java.io.IOException</span><span class="o">;</span>
+<span class="kn">import</span> <span class="nn">java.io.ObjectInput</span><span class="o">;</span>
+<span class="kn">import</span> <span class="nn">java.io.ObjectOutput</span><span class="o">;</span>
+
+<span class="kd">public</span> <span class="kd">class</span> <span class="nc">EmployeeExternalizable</span> <span class="kd">implements</span> <span class="nc">Externalizable</span> <span class="o">{</span>
+
+    <span class="kd">public</span> <span class="nc">String</span> <span class="n">name</span><span class="o">;</span>
+    <span class="kd">public</span> <span class="nc">String</span> <span class="n">address</span><span class="o">;</span>
+    <span class="kd">public</span> <span class="kt">int</span> <span class="no">SSN</span><span class="o">;</span>
+    <span class="kd">public</span> <span class="kt">int</span> <span class="n">number</span><span class="o">;</span>
+
+    <span class="c1">// getter, setter</span>
+
+    <span class="c1">// Serialize 할 때 쓰임</span>
+    <span class="nd">@Override</span>
+    <span class="kd">public</span> <span class="kt">void</span> <span class="nf">writeExternal</span><span class="o">(</span><span class="nc">ObjectOutput</span> <span class="n">out</span><span class="o">)</span> <span class="kd">throws</span> <span class="nc">IOException</span> <span class="o">{</span>
+        <span class="n">out</span><span class="o">.</span><span class="na">writeObject</span><span class="o">(</span><span class="n">name</span><span class="o">);</span>
+        <span class="n">out</span><span class="o">.</span><span class="na">writeObject</span><span class="o">(</span><span class="n">address</span><span class="o">);</span>
+        <span class="n">out</span><span class="o">.</span><span class="na">writeInt</span><span class="o">(</span><span class="n">number</span><span class="o">);</span>
+    <span class="o">}</span>
+
+    <span class="c1">// Deserialize 할 때 쓰임</span>
+    <span class="nd">@Override</span>
+    <span class="kd">public</span> <span class="kt">void</span> <span class="nf">readExternal</span><span class="o">(</span><span class="nc">ObjectInput</span> <span class="n">in</span><span class="o">)</span> <span class="kd">throws</span> <span class="nc">IOException</span><span class="o">,</span> <span class="nc">ClassNotFoundException</span> <span class="o">{</span>
+        <span class="k">this</span><span class="o">.</span><span class="na">name</span> <span class="o">=</span> <span class="o">(</span><span class="nc">String</span><span class="o">)</span> <span class="n">in</span><span class="o">.</span><span class="na">readObject</span><span class="o">();</span>
+        <span class="k">this</span><span class="o">.</span><span class="na">address</span> <span class="o">=</span> <span class="o">(</span><span class="nc">String</span><span class="o">)</span> <span class="n">in</span><span class="o">.</span><span class="na">readObject</span><span class="o">();</span>
+        <span class="k">this</span><span class="o">.</span><span class="na">number</span> <span class="o">=</span> <span class="n">in</span><span class="o">.</span><span class="na">readInt</span><span class="o">();</span>
+    <span class="o">}</span>
+<span class="o">}</span>
+
+<span class="cm">/* Externalize Demo */</span>
+<span class="kn">import</span> <span class="nn">java.io.*</span><span class="o">;</span>
+
+<span class="kd">public</span> <span class="kd">class</span> <span class="nc">ExternalizeDemo</span> <span class="o">{</span>
+
+    <span class="kd">public</span> <span class="kd">static</span> <span class="kt">void</span> <span class="nf">main</span><span class="o">(</span><span class="nc">String</span><span class="o">[]</span> <span class="n">args</span><span class="o">)</span> <span class="kd">throws</span> <span class="nc">IOException</span><span class="o">,</span> <span class="nc">ClassNotFoundException</span> <span class="o">{</span>
+        <span class="nc">EmployeeExternalizable</span> <span class="n">employeeEx</span> <span class="o">=</span> <span class="k">new</span> <span class="nc">EmployeeExternalizable</span><span class="o">();</span>
+        <span class="n">employeeEx</span><span class="o">.</span><span class="na">setAddress</span><span class="o">(</span><span class="s">"438 Seymour Street"</span><span class="o">);</span>
+        <span class="n">employeeEx</span><span class="o">.</span><span class="na">setName</span><span class="o">(</span><span class="s">"John Doe"</span><span class="o">);</span>
+        <span class="n">employeeEx</span><span class="o">.</span><span class="na">setNumber</span><span class="o">(</span><span class="mi">101</span><span class="o">);</span>
+
+        <span class="nc">String</span> <span class="n">path</span> <span class="o">=</span> <span class="s">"src/main/resources/employeeEx.ser"</span><span class="o">;</span>
+
+        <span class="c1">// Serialization</span>
+        <span class="k">try</span> <span class="o">(</span><span class="nc">FileOutputStream</span> <span class="n">fos</span> <span class="o">=</span> <span class="k">new</span> <span class="nc">FileOutputStream</span><span class="o">(</span><span class="n">path</span><span class="o">);</span>
+            <span class="nc">ObjectOutputStream</span> <span class="n">oos</span> <span class="o">=</span> <span class="k">new</span> <span class="nc">ObjectOutputStream</span><span class="o">(</span><span class="n">fos</span><span class="o">))</span> <span class="o">{</span>
+            <span class="n">employeeEx</span><span class="o">.</span><span class="na">writeExternal</span><span class="o">(</span><span class="n">oos</span><span class="o">);</span>
+        <span class="o">}</span> <span class="k">catch</span> <span class="o">(</span><span class="nc">IOException</span> <span class="n">e</span><span class="o">)</span> <span class="o">{</span>
+            <span class="nc">System</span><span class="o">.</span><span class="na">err</span><span class="o">.</span><span class="na">println</span><span class="o">(</span><span class="s">"Error occurred during serialization!"</span><span class="o">);</span>
+            <span class="n">e</span><span class="o">.</span><span class="na">printStackTrace</span><span class="o">();</span>
+        <span class="o">}</span>
+
+        <span class="c1">// Deserialization</span>
+        <span class="nc">EmployeeExternalizable</span> <span class="n">employeeEx2</span> <span class="o">=</span> <span class="k">new</span> <span class="nc">EmployeeExternalizable</span><span class="o">();</span>
+
+        <span class="k">try</span><span class="o">(</span><span class="nc">FileInputStream</span> <span class="n">fis</span> <span class="o">=</span> <span class="k">new</span> <span class="nc">FileInputStream</span><span class="o">(</span><span class="n">path</span><span class="o">);</span>
+            <span class="nc">ObjectInputStream</span> <span class="n">ois</span> <span class="o">=</span> <span class="k">new</span> <span class="nc">ObjectInputStream</span><span class="o">(</span><span class="n">fis</span><span class="o">))</span> <span class="o">{</span>
+            <span class="n">employeeEx2</span><span class="o">.</span><span class="na">readExternal</span><span class="o">(</span><span class="n">ois</span><span class="o">);</span>
+        <span class="o">}</span> <span class="k">catch</span> <span class="o">(</span><span class="nc">IOException</span> <span class="o">|</span> <span class="nc">ClassNotFoundException</span> <span class="n">e</span><span class="o">)</span> <span class="o">{</span>
+            <span class="nc">System</span><span class="o">.</span><span class="na">err</span><span class="o">.</span><span class="na">println</span><span class="o">(</span><span class="s">"Error occurred during deserialization!"</span><span class="o">);</span>
+            <span class="n">e</span><span class="o">.</span><span class="na">printStackTrace</span><span class="o">();</span>
+        <span class="o">}</span>
+
+        <span class="nc">System</span><span class="o">.</span><span class="na">out</span><span class="o">.</span><span class="na">println</span><span class="o">(</span><span class="n">employeeEx2</span><span class="o">.</span><span class="na">getAddress</span><span class="o">().</span><span class="na">equals</span><span class="o">(</span><span class="n">employeeEx</span><span class="o">.</span><span class="na">getAddress</span><span class="o">()));</span>
+        <span class="nc">System</span><span class="o">.</span><span class="na">out</span><span class="o">.</span><span class="na">println</span><span class="o">(</span><span class="n">employeeEx2</span><span class="o">.</span><span class="na">getName</span><span class="o">().</span><span class="na">equals</span><span class="o">(</span><span class="n">employeeEx</span><span class="o">.</span><span class="na">getName</span><span class="o">()));</span>
+        <span class="nc">System</span><span class="o">.</span><span class="na">out</span><span class="o">.</span><span class="na">println</span><span class="o">(</span><span class="n">employeeEx2</span><span class="o">.</span><span class="na">getNumber</span><span class="o">()</span> <span class="o">==</span> <span class="n">employeeEx</span><span class="o">.</span><span class="na">getNumber</span><span class="o">());</span>
+
+        <span class="cm">/**
+          true
+          true
+          true
+        */</span>
+    <span class="o">}</span>
+<span class="o">}</span>
+</code></pre></div>    </div>
+  </li>
+</ul>
+
+<p><br /></p>
+
+<h2 id="4-serialization-과-externalization-의-차이점">4. Serialization 과 Externalization 의 차이점</h2>
+
+<!-- 
+ &nbsp; | Key | Serialization | Externalization
+| :---: | :---: | :---: | :---: |
+1  | Interface | It is a marker interface | Contains `readExternal()` and `writeExternal()`
+2  | Implementation logic | Gives responsibility to JVM for serializing | Provides implementation logic control to developer
+3  | Way to ignore variables | JVM ignores transient variables | Developer can choose variables to ignore or transient
+4  | Performance | Relatively slow as it uses reflection | Relatively faster as it provides a full control over the implementation approach
+-->
+
+<table>
+  <thead>
+    <tr>
+      <th style="text-align: center"> </th>
+      <th style="text-align: center">Key</th>
+      <th style="text-align: center">Serialization</th>
+      <th style="text-align: center">Externalization</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td style="text-align: center">1</td>
+      <td style="text-align: center">Interface</td>
+      <td style="text-align: center">마커 인터페이스</td>
+      <td style="text-align: center"><code class="language-plaintext highlighter-rouge">readExternal()</code>,  <code class="language-plaintext highlighter-rouge">writeExternal()</code> 포함</td>
+    </tr>
+    <tr>
+      <td style="text-align: center">2</td>
+      <td style="text-align: center">Implementation logic</td>
+      <td style="text-align: center">JVM이 모든 권한을 가짐</td>
+      <td style="text-align: center">개발자가 logic을 변경할 수 있음</td>
+    </tr>
+    <tr>
+      <td style="text-align: center">3</td>
+      <td style="text-align: center">Way to ignore variables</td>
+      <td style="text-align: center">JVM이 static 혹은 transient data를 제외함</td>
+      <td style="text-align: center">개발자가 선택할 수 있음</td>
+    </tr>
+    <tr>
+      <td style="text-align: center">4</td>
+      <td style="text-align: center">Performance</td>
+      <td style="text-align: center">Reflection을 사용하기 때문에 상대적으로 느림</td>
+      <td style="text-align: center">개발자가 implementation을 control할 수 있기 때문에 상대적으로 빠름</td>
+    </tr>
+  </tbody>
+</table>
+
+<p><br /></p>
+
+<h2 id="5-references">5. References</h2>
+
+<p><a href="&quot;https://docs.oracle.com/javase/tutorial/jndi/objects/serial.html&quot;">Java Documentation - Serializable Objects</a><br />
+<a href="&quot;https://www.tutorialspoint.com/java/java_serialization.htm&quot;">TutorialsPoint - Java Serialization</a><br />
+<a href="&quot;https://www.geeksforgeeks.org/serialization-in-java/&quot;">Geeksforgeeks - Serialization and Deserialization in Java with Example</a><br />
+<a href="&quot;https://www.baeldung.com/java-serialization&quot;">Baeldung - Introduction to Java Serialization</a></p>
+:ET
