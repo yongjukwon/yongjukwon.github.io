@@ -1,0 +1,1 @@
+bash ./tools/deploy.sh --dry-run

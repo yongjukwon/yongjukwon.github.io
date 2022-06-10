@@ -722,12 +722,17 @@ $sidebar-display: "sidebar-display";
   }
 
   .nav-link {
+    padding-right: 35%;
     border-radius: 0;
     font-size: 0.95rem;
     font-weight: 600;
     letter-spacing: 1px;
     display: table-cell;
     vertical-align: middle;
+
+    @media (max-width: 1650px) {
+      padding-right: 5%;
+    }
   }
 
   .nav-item {
@@ -1558,13 +1563,14 @@ $sidebar-display: "sidebar-display";
     .profile-wrapper {
       margin-top: 4rem;
       margin-bottom: 1rem;
+      justify-content: center;
 
       &.text-center {
-        text-align: left !important;
+        text-align: center !important;
       }
 
       %profile-ml {
-        margin-left: 4.5rem;
+        // margin-left: 4.5rem;
       }
 
       #avatar {
@@ -1575,7 +1581,7 @@ $sidebar-display: "sidebar-display";
           height: 6.2rem;
 
           &.mx-auto {
-            margin-left: 0 !important;
+            // margin-left: 0 !important;
           }
         }
       }
@@ -1608,7 +1614,7 @@ $sidebar-display: "sidebar-display";
       }
 
       .nav-item {
-        text-align: left;
+        // text-align: left;
 
         .nav-link {
           > span {

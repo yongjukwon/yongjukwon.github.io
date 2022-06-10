@@ -1,6 +1,6 @@
 ---
 title: Yongju Kwon
-icon: fas fa-info-circle
+# icon: fas fa-info-circle
 order: 1
 ---
 
