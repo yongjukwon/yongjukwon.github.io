@@ -19,12 +19,13 @@ jobs:
         with:
           fetch-depth: 0  # for posts's lastmod
 
+      - run: gem update --system 3.2.3
+
       - name: Setup Ruby
-      - uses: ruby/setup-ruby@v1
+        uses: ruby/setup-ruby@v1
         with:
           ruby-version: 3.0
-          bundler-cache: true
-      - run: gem update --system    
+          bundler-cache: true      
 
       - name: Deploy
         run: bash tools/deploy.sh
