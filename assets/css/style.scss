@@ -1,0 +1,58 @@
+---
+---
+
+/*
+  If the number of TAB files has changed, the following variable is required.
+  And it must be defined before `@import`.
+*/
+$tab-count: {{ site.tabs | size | plus: 1 }}; // plus 1 for home tab
+
+@import "{{ site.theme }}";
+
+/* append your custom style below */
+#core-wrapper, #tail-wrapper  {
+  margin: 0 auto;
+  margin-top: 3rem;
+  max-width: 60%;
+
+  @media (max-width: 768px) {
+    max-width: 100%;
+  }
+
+  @media (min-width: 769px) and (max-width: 1023px) {
+    max-width: 100%;
+  }
+
+  // @media (max-width: 1024px) {
+  //   max-width: 100%;
+  // }
+
+  @media (min-width: 1024px) and (max-width: 1200px) {
+    max-width: 85%;
+  }
+}
+
+.col-xl-3 {
+  max-width: 15%;
+}
+
+#tail-wrapper {
+  margin-top: 0;
+  right: 7.5%;
+
+  @media (max-width: 768px) {
+    right: 0;
+  }
+
+  @media (min-width: 768px) and (max-width: 1024px) {
+    right: 0;
+  }
+
+  @media (min-width: 1024px) and (max-width: 1200px) {
+    right: 0;
+  }
+
+  // @media (min-width: 1200px) {
+  //   right: 0;
+  // }
+}
