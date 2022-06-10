@@ -27,10 +27,11 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v2
         with:
-          fetch-depth: 0  # for posts's lastmod        
+          fetch-depth: 0  # for posts's lastmod
+      - name: Gem Update
+        run: sudo gem update --system 3.2.3
       - name: Setup Ruby
         uses: ruby/setup-ruby@v1
-        run: gem update --system 3.2.3
         with:
           ruby-version: ${{ matrix.ruby }}
           bundler-cache: true
