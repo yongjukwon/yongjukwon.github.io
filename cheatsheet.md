@@ -1,1 +1,2 @@
-bash ./tools/deploy.sh --dry-run
+
+bundle exec jekyll s --livereload
