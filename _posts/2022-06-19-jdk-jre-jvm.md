@@ -1,9 +1,9 @@
 ---
-title: JDK, JRE and JVM
+title: JVM, JRE and JDK
 author: Yongju Kwon
 date: 2022-06-19 16:23:00 -0700
 categories: [Programming, Java]
-tags: [Java, JDK, JRE, JVM]
+tags: [Java, JVM, JRE, JDK]
 ---
 
 ## ⒈ Background
@@ -34,18 +34,18 @@ Java Runtime Environment(JRE)는 **JVM을 포함해서 자바 어플리케이션
 
 Java Development Kit(JDK)는 **자바 어플리케이션을 개발하기 위해 필요한 패키지**이다. JDK는 JRE와 함께 개발에 필요한 툴(컴파일러, JavaDoc, 디버거 등)을 포함하고 있다.
 
-JRE와 JDK에 포함되는 라이브러리나 파일들은 이 그림을 참고하자👉🏻[JDK, JRE & JVM (Complex version)](#-conclusion)
+JRE와 JDK에 포함되는 라이브러리나 파일들은 이 그림을 참고하자👉🏻[JVM, JRE & JDK (Complex version)](#-conclusion)
 
 ## ⒌ Conclusion
 
 따라서 JVM, JRE 그리고 JDK의 관계는 다음과 같다.
 
 ![JDK_JRE_JVM_simple](/assets/img/20220618/jdk-jre-jvm-simple.png)
-_JDK, JRE & JVM(geeksforgeeks.org)_
+_JVM, JRE & JDK(geeksforgeeks.org)_
 
 그리고 더욱 깊게 알고 싶은 분들을 위해..🫠
 ![JDK_JRE_JVM_complex](/assets/img/20220618/jdk-jre-jvm-complex.png)
-_JDK, JRE & JVM(oracle.com)_
+_JVM, JRE & JDK(oracle.com)_
 
 ## ⒍ References
 
