@@ -21,7 +21,7 @@ timezone: America/Vancouver
 # jekyll-seo-tag settings › https://github.com/jekyll/jekyll-seo-tag/blob/master/docs/usage.md
 # ↓ --------------------------
 
-title: 밴쿠버에서 <br/> 개발하는 펭귄                           # the main title
+title: 밴쿠버에서 개발하는 펭귄                           # the main title
 
 # tagline: A text-focused Jekyll theme   # it will display as the sub-title
 
@@ -190,7 +190,6 @@ exclude:
   - gulpfile.js
   - node_modules
   - package*.json
-  - index.html
 
 jekyll-archives:
   enabled: [categories, tags]
