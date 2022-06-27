@@ -73,7 +73,7 @@ _JVM Architecture simple version(careerbless.com)_
   _local_variable_array(geeksforgeeks.org)_
 
   - `Operand stack`: 하나의 workspace 또는 work area 라고 생각할 수 있고, calculation 중간의 결과들을 저장할 수 있는 장소이다\
-  - `Frame data`: TBU
+  - `Frame data`: Constant Pool, 이전 스택 프레임에 대한 정보, 현재 method가 속한 클래스에 대한 reference 등의 정보를 갖는다
 
   4). `PC Registers`: 하나의 thread 당 하나의 PC register가 생성된다. PC register는 현재 실행되는 instruction의 address를 가지고 있다.
   >만약 현재 실행되는 method가 native라면 PC register의 값은 undefined이다
