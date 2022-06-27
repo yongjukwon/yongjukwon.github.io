@@ -22,7 +22,7 @@ _JVM Architecture simple version(careerbless.com)_
 
 ## ⒉ JVM's 3 components
 
-### 2-1. Class Loader Subsystem
+### ２-⒈ Class Loader Subsystem
   
   ![class_loader_subsystem](/assets/img/20110624/class_loader_subsystem.png){:width="50%"}
 
@@ -41,7 +41,7 @@ _JVM Architecture simple version(careerbless.com)_
   3) `Initialization`: linking process(Prepare, specifically)에서 initialize된 static variables에 할당된 값을 제공하고, static block들이 실행된다.
 
 
-### 2-2. Runtime Data Areas
+### ２-⒉ Runtime Data Areas
 
   ![runtime_data_area](/assets/img/20110624/runtime_data_area.png){:width="80%"}
 
@@ -81,7 +81,7 @@ _JVM Architecture simple version(careerbless.com)_
   5) `Native Method Stack`: Native method의 정보를 저장한다. 하나의 thread 당 하나의 native method stack이 생성된다.
 
 
-### 2-3. Execution Engine
+### ２-⒊ Execution Engine
 
 ![execution_engine](/assets/img/20110624/execution_engine.png){:width="60%"}
 _execution engine(geeksforgeeks.org)_
