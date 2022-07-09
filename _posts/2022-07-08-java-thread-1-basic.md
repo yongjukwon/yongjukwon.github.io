@@ -3,7 +3,7 @@ title: Java's Thread
 author: Yongju Kwon
 date: 2022-07-08 19:51:00 -0700
 categories: [Programming, Java]
-tags: [Java, Thread, Process]
+tags: [Java, Thread]
 ---
 
 ## ⒈ Background
