@@ -29,7 +29,7 @@ JVM이 실행될 때, 보통은 오직 하나의 `Non-Daemon Thread`(혹은 `Use
 참고로 Daemon Thread는 IDE의 디버거를 통해 쉽게 볼 수 있다.
 
 ![Daemon Threads](/assets/img/20220708/threads.png)
-_Non-Daemon Threads: Finalizer, Reference Handler, Single Dispatcher가 Daemon Thread에서 실행되고 있다_
+_Daemon Threads: Finalizer, Reference Handler, Single Dispatcher가 Daemon Thread에서 실행되고 있다_
 
 ## ⒊ How to create a thread in Java
 
