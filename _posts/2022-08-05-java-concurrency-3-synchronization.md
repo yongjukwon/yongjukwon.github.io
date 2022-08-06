@@ -1,5 +1,5 @@
 ---
-title: Java's Thread - 3 (Synchronization)
+title: Java's Concurrency - 3 (Synchronization)
 author: Yongju Kwon
 date: 2022-08-05 23:07:00 -0700
 categories: [Programming, Java]
@@ -87,7 +87,7 @@ CPU가 어떤 값을 쓰는(write) 작업을 할 때에는 다른 작업들은 �
 
 ## ⒋ Synchronized methods
 
-자바는 두 가지 기본 synchronization 방법을 제공하는데, ¹`synchronized methods` 와 ²`synchronized statements`이다. 이번 섹션에서는 synchronized methods에 대해 알아보고 다음 섹션([5.Implicit Locks and Synchronization](#-implicit-locks-and-synchronization))에서 synchronized statements에 대해 알아볼 것이다.
+자바는 두 가지 기본 synchronization 방법을 제공하는데, ¹`synchronized methods` 와 ²`synchronized statements`이다. 이번 섹션에서는 synchronized methods에 대해 알아보고 다음 섹션([5.Implicit Locks and Synchronization](#-intrinsic-locks-and-synchronization))에서 synchronized statements에 대해 알아볼 것이다.
 
 메소드를 synchronized 로 만들기 위해서는 `synchronized`라는 키워드를 access modifier 뒤에 붙여주면 된다.
 

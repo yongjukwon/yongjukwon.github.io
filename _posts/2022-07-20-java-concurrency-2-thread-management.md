@@ -1,5 +1,5 @@
 ---
-title: Java's Thread - 2 (Basic)
+title: Java's Concurrency - 2 (Thread management)
 author: Yongju Kwon
 date: 2022-07-22 22:27:00 -0700
 categories: [Programming, Java]
