@@ -2,8 +2,8 @@
 title: Java's Thread - 2 (Basic)
 author: Yongju Kwon
 date: 2022-07-22 22:27:00 -0700
-categories: []
-tags: []
+categories: [Programming, Java]
+tags: [Java, Thread]
 ---
 
 ## ⒈ Background
