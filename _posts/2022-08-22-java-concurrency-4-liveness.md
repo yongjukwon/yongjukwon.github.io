@@ -6,14 +6,14 @@ categories: [Programming, Java]
 tags: [Java, Thread]
 ---
 
-이번 포스팅에서는 저번에 글이 길어져 포함하지 않은 Atomic access와 함께 Liveness에 대해서 알아볼 것이다.
+이번 포스팅에서는 저번에 글이 길어져 포함하지 않은 Liveness에 대해서 알아볼 것이다.
 
-## ⒈ Atomic Access
-## ⒉ Liveness?
+## ⒈ Liveness?
 
-동시에 실행되는 어플리케이션을 시간적으로 적절하게 실행시키는 것을 `Liveness`라고 한다. 한국말로 해석한 것을 찾아보니 활동성이라고 한다. 아래에서 가장 흔한 liveness 문제인 `deadlock`에 대해 알아보고 다른 두 가지 문제인 `starvation`과 `livelock`도 간단히 알아보도록 하자.
+동시에 실행되는 어플리케이션을 시간적으로 적절하게 실행시키는 것을 `Liveness`라고 한다. 한국말로 해석한 것을 찾아보니 활동성이라고 한다. 아래에서 가장 흔한 liveness 문제인 `deadlock`에 대해 알아보고 다른 두 가지 문제인 `starvation`과 `livelock`도 간단히 알아보도록 
+하자.
 
-## ⒊ Deadlock
+## ⒉ Deadlock
 
 `Deadlock`은 두 개 혹은 그 이상의 쓰레드가 서로를 기다리며 영원히 blocked 된 상태다. 예를 들어, 친구인 A와 B가 있고 이 둘 사이에는 꼭 따라야만 하는 한 가지 규칙이 있다고 가정해보자. 이 규칙은 한 사람이 다른 사람에게 고개를 숙여 인사하면 인사를 받은 사람이 인사할 때까지 처음 인사를 한 사람은 계속 고개를 숙이고 있어야 한다. 이 규칙의 맹점은 무엇일까?  
 바로 두 사람이 동시에 인사를 하는 경우를 생각하지 않았다. 그렇다면 두 사람이 동시에 인사를 하면 어떻게 될까? 아래 코드를 통해 알아보자.
@@ -57,9 +57,10 @@ public class Deadlock {
 IntelliJ의 debugger를 통해 이 두 쓰레드의 상태를 보면 아래와 같다. Thread-0@780은 Thread-1@783이 lock을 release하기를 기다리고 있고, 똑같이 반대로 Thread-1@783은 Thread-0@780이 lock을 release하기를 기다리고 있다.  
 이 상태를 우리는 deadlock이라고 부른다.
 
-![DeadLock](/assets/img/20220822/%08deadlock.png)
+![Deadlock](/assets/img/20220822/%08deadlock.png)
+_Deadlock_
 
-## ⒋ Starvation and Livelock
+## ⒊ Starvation and Livelock
 
 Starvation과 livelock은 deadlock보다는 덜 흔한 문제이지만 여전히 개발자라면 마주칠 수 있는 문제들이다.
 
@@ -143,11 +144,11 @@ public class HostageRescueLivelock {
 ![Livelock](/assets/img/20220822/livelock.png)
 _Livelock_
 
-
-## ⒌ Retrospective
+## ⒋ Retrospective
 
 Oracle의 공식 documentation을 읽으면서 Concurrency에 대해서 정리해봐야지 하면서 시작한 시리즈 였는데 4개까지 쓸 줄은 몰랐다. 이 뒤로도 같은 카테고리의 내용이 있는데 지금까지의 내용보다 High-level의 Concurrency를 다루는 내용이다. 내용이 많지는 않아서 두 번 정도 포스팅을 더 하면 마무리할 수 있을 것 같다. 블로그 스터디는 마지막 주 이지만 계속 써 나가서 더 깊이 알고 있는 자바 개발자가 되야지.!
 
-## ⒍ Reference
+## ⒌ Reference
+
 [Oracle Java Documentation](https://docs.oracle.com/javase/tutorial/essential/concurrency/liveness.html)\
 [Understanding Deadlock, Livelock and Starvation with Code Examples in Java](https://www.codejava.net/java-core/concurrency/understanding-deadlock-livelock-and-starvation-with-code-examples-in-java)
