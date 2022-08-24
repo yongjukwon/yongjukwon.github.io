@@ -65,7 +65,7 @@ _Deadlock_
 Starvation과 livelock은 deadlock보다는 덜 흔한 문제이지만 여전히 개발자라면 마주칠 수 있는 문제들이다.
 
 ⑴ `Starvation`
- Starvation은 쓰레드가 다른 쓰레드들과 공유하는 자원들에 접근할 수 없어서 더 이상 진행할 수 있는 상태이다. 보통 'greedy' threads에 의해 일어나는 상황이다.  
+ Starvation은 쓰레드가 다른 쓰레드들과 공유하는 자원들에 접근할 수 없어서 더 이상 진행할 수 없는 상태이다. 보통 'greedy' threads에 의해 일어나는 상황이다.  
 하나의 예로, 어떤 오브젝트가 synchronized method를 제공하는데 내부의 코드가 시간이 오래 걸리는 작업이라고 가정해보자. 그런데 어떤 한 쓰레드가 이 메소드를 자주 불러서 다른 쓰레드들이 접근할 때마다 접근이 불가능할 수 있는데 이 상황을 starvation이라고 부른다.
 
 ⑵ `Livelock`
